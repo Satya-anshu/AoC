@@ -40,27 +40,19 @@ def findBags(bag, bagMap, bagSeen):
     
 
 bagSeen = set()
-if shinygold not in bagMap:
-    print("Part1 Puzzle: ", 0)
-else:
+if shinygold in bagMap:
     for i in bagMap[shinygold]:
         findBags(i, bagMap,bagSeen)
-    print("Part1 Puzzle: ",len(bagSeen))
+print("Part1 Puzzle: ",len(bagSeen))
 
 '''
 Find Count of Inner Bags
 '''
 def findInnerBags(key, bagCountMap):
-    go_in = False
     count = 0
     for key,value in bagCountMap[key].items():
-        go_in = True
-        val = value * findInnerBags(key,bagCountMap)
-        count += value + val
-    if go_in:
-        return count
-    else:
-        return 0
+        count += value + value * findInnerBags(key,bagCountMap)
+    return count
 
 count = 0
 for key,value in bagCountMap[shinygold].items():

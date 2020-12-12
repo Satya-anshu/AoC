@@ -28,8 +28,7 @@ class Ship:
                 self.wayY *= -1
         else:
             self.x += self.wayX * num
-            self.y += self.wayY * num   
-        print(direction,self.x, self.y, self.wayX, self.wayY)
+            self.y += self.wayY * num
         
 def main():
     ship = Ship()

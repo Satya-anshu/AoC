@@ -52,7 +52,7 @@ if __name__ == "__main__":
     lines = list(map(int,open("input.txt","r").read().splitlines()))
     linesTest = list(map(int,test_input.splitlines()))
     # Part 1
-    # solve_part1(lines)
+    solve_part1(lines)
 
     # Part 2
     solve_part2(lines)

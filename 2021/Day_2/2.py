@@ -35,7 +35,6 @@ def solve2(lines):
             x += int(val)
             y += aim * int(val)
         elif "down" in ins:
-            #y += int(val)
             aim += int(val)
         else:
             aim -= int(val)
@@ -44,5 +43,5 @@ def solve2(lines):
 if __name__ == "__main__":
     lines = open("input.txt","r").read().splitlines()
     linesTest = list(test_input.splitlines())
-    solve1(lines)
+    #solve1(lines)
     solve2(lines)

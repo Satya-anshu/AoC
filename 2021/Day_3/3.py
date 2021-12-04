@@ -28,16 +28,21 @@ def solve_1(lines):
         for j in range(len(lines[i])):
             if lines[i][j] == '1':
                 cntOnes[j] += 1
-    # print(cntOnes)
+    
     # Build epsilon and gamma
-    epsilon = 0
-    gamma = 0
+    epsilon = ''
+    gamma = ''
     for i,ones in enumerate(cntOnes):
         if max(ones,numRows-ones) == ones:
-            gamma += (pow(2,len(cntOnes)-i-1))
+            epsilon += '1'
+            gamma+='0'
         else:
-            epsilon += (pow(2,len(cntOnes)-i-1))
-    print(gamma * epsilon)
+            epsilon += '0'
+            gamma += '1'
+    epsilon = int(epsilon,2)
+    gamma = int(gamma,2)
+    print(epsilon * gamma)
+    
 
 def filter(pos,oxygen,co2):
     # Count number of 0s and 1s for specified position and filter the list

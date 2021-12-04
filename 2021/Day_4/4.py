@@ -98,8 +98,7 @@ def solve_2(lines):
                         board[i][j] = -1
             
             if(board_num in boards_not_won and check(board)):
-                if board_num in boards_not_won:
-                    boards_not_won.remove(board_num)
+                boards_not_won.remove(board_num)
                 
                 if len(boards_not_won) != 0:
                     continue

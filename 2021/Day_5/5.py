@@ -43,13 +43,8 @@ def print_intersection(line_map):
     print(cnt_intersection)
 
 def map_points(line_map,x1,y1,x2,y2,dx,dy):
-    if dx == 0:
-        dy = 1 if dy > 0 else -1
-    elif dy == 0:
-        dx = 1 if dx > 0 else -1
-    elif abs(x1-x2) == abs(y1-y2):
-        dx = 1 if dx > 0 else -1
-        dy = 1 if dy > 0 else -1
+    dx = 1 if dx > 0 else (0 if dx == 0 else -1)
+    dy = 1 if dy > 0 else (0 if dy == 0 else -1)
     
     x,y = x1,y1
     while x != x2+dx or y != y2+dy:

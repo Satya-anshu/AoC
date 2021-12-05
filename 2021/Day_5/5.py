@@ -45,35 +45,20 @@ def print_intersection(line_map):
 def map_points(line_map,x1,y1,x2,y2,dx,dy):
     if dx == 0:
         dy = 1 if dy > 0 else -1
-        # Map y points
-        for y in range(y1,y2+dy,dy):
-            if (x1,y) in line_map:
-                line_map[(x1,y)] += 1
-            else:
-                line_map[(x1,y)] = 1
     elif dy == 0:
         dx = 1 if dx > 0 else -1
-        # Map x points
-        for x in range(x1,x2+dx,dx):
-            if (x,y1) in line_map:
-                line_map[(x,y1)] += 1
-            else:
-                line_map[(x,y1)] = 1
     elif abs(x1-x2) == abs(y1-y2):
         dx = 1 if dx > 0 else -1
         dy = 1 if dy > 0 else -1
-        x,y = x1,y1
-        while x != x2 and y != y2:
-            if (x,y) in line_map:
-                line_map[(x,y)] += 1
-            else:
-                line_map[(x,y)] = 1
-            x += dx
-            y += dy
+    
+    x,y = x1,y1
+    while x != x2+dx or y != y2+dy:
         if (x,y) in line_map:
-                line_map[(x,y)] += 1
+            line_map[(x,y)] += 1
         else:
             line_map[(x,y)] = 1
+        x += dx
+        y += dy
 
 def solve_1(lines):
     lines = get_lines(lines)

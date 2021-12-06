@@ -10,24 +10,7 @@ os.chdir(dname)
 test_input = \
 '''3,4,3,1,2
 '''
-def solve_1(lines):
-    days_left = [0] * 9
-    total = 0
-    for day in lines:
-        days_left[day] += 1
-
-    total = sum(days_left)
-
-    for day in range(80):
-        total += days_left[0]
-        carry = days_left[0]
-        for i in range(len(days_left)-1):
-            days_left[i] = days_left[i+1]
-        days_left[6] += carry
-        days_left[8] = carry
-    print(total)
-
-def solve_2(lines):
+def solve(lines, days):
     # Here the exponential growth would kill the processing
     # Need an efficient way to handle it.
     # Any new fish that gets created starts from 8 and older ones start from 7
@@ -39,7 +22,7 @@ def solve_2(lines):
 
     total = sum(days_left)
 
-    for day in range(256):
+    for day in range(days):
         total += days_left[0]
         carry = days_left[0]
         for i in range(len(days_left)-1):
@@ -47,6 +30,12 @@ def solve_2(lines):
         days_left[6] += carry
         days_left[8] = carry
     print(total)
+
+def solve_1(lines):
+    solve(lines,80)
+
+def solve_2(lines):
+    solve(lines,256)
 
 if __name__ == "__main__":
     lines = list(map(int,open("input.txt","r").read().splitlines()[0].split(",")))

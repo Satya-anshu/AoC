@@ -42,7 +42,7 @@ def solve_1(lines):
     print(error_score)
 
 def solve_2(lines):
-    complete_scores = []
+    incomplete_scores = []
     for line in lines:
         stk = []
         error = False
@@ -68,10 +68,9 @@ def solve_2(lines):
             else:
                 val = 4
             score = score * 5 + val
-        complete_scores.append(score)
-    complete_scores.sort()
-    print(complete_scores)
-    print(complete_scores[len(complete_scores)//2])
+        incomplete_scores.append(score)
+    incomplete_scores.sort()
+    print(incomplete_scores[len(incomplete_scores)//2])
 
 if __name__ == "__main__":
     lines = open("input.txt","r").read().splitlines()

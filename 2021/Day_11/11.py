@@ -1,6 +1,7 @@
-import os
-import copy
 import collections
+import copy
+import os
+import numpy as np
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
@@ -20,78 +21,47 @@ test_input = \
 5283751526
 '''
 
-def solve_1(lines,steps):
+def solve_1(energies,steps):
     total_flashes = 0
-    safe = lambda a,b: 0<=a<len(lines) and 0<=b<len(lines[0])
+    energies = np.pad(energies, (1,1), 'constant', constant_values = np.iinfo(np.int32).min)
     for step in range(steps):
-        q = collections.deque()
-        for row,line in enumerate(lines):
-            for col,val in enumerate(line):
-                lines[row][col] += 1
-                if lines[row][col] == 10:
-                    q.append((row,col))
-        
-        while len(q) > 0:
-            row,col = q.popleft()
-            for pos_x in range(-1,2):
-                for pos_y in range(-1,2):
-                    if pos_x == pos_y == 0:
-                        continue
-                    new_x = row + pos_x
-                    new_y = col + pos_y
-                    if safe(new_x,new_y):
-                        lines[new_x][new_y] += 1
-                        if lines[new_x][new_y] == 10:
-                            q.append((new_x,new_y))
-                            
-        # Find and reset all flashes
-        for i in range(len(lines)):
-            for j in range(len(lines[0])):
-                if lines[i][j] > 9:
-                    lines[i][j] = 0
-                    total_flashes+=1
+        energies += 1
+        flashes = np.any(energies > 9)
+        while flashes:
+            total_flashes += np.count_nonzero(energies > 9)
+            flash_points = np.where(energies > 9)
+            energies[energies > 9] = 0
+            for point in zip(flash_points[0],flash_points[1]):
+                adjacent_points = energies[point[0]-1:point[0]+2, point[1]-1:point[1]+2]
+                adjacent_points[adjacent_points != 0] += 1
+                energies[point[0]-1:point[0]+2, point[1]-1:point[1]+2] = adjacent_points
+            flashes = np.any(energies > 9)
     print(total_flashes)
 
-def solve_2(lines):
-    safe = lambda a,b: 0<=a<len(lines) and 0<=b<len(lines[0])
-    steps = 1
+def solve_2(energies):
+    energies = np.pad(energies, (1,1), 'constant', constant_values = np.iinfo(np.int32).min)
+    step = 1
     while True:
-        q = collections.deque()
-        flashed = set()
-        for row,line in enumerate(lines):
-            for col,val in enumerate(line):
-                lines[row][col] += 1
-                if lines[row][col] == 10:
-                    q.append((row,col))
-                    flashed.add((row,col))
+        energies += 1
+        flashes = np.any(energies > 9)
+        while flashes:
+            flash_points = np.where(energies > 9)
+            energies[energies > 9] = 0
+            for point in zip(flash_points[0],flash_points[1]):
+                adjacent_points = energies[point[0]-1:point[0]+2, point[1]-1:point[1]+2]
+                adjacent_points[adjacent_points != 0] += 1
+                energies[point[0]-1:point[0]+2, point[1]-1:point[1]+2] = adjacent_points
+            flashes = np.any(energies > 9)
         
-        while len(q) > 0:
-            row,col = q.popleft()
-            for pos_x in range(-1,2):
-                for pos_y in range(-1,2):
-                    if pos_x == pos_y == 0:
-                        continue
-                    new_x = row + pos_x
-                    new_y = col + pos_y
-                    if safe(new_x,new_y):
-                        lines[new_x][new_y] += 1
-                        if lines[new_x][new_y] == 10:
-                            q.append((new_x,new_y))
-        cnt = 0
-        for i in range(len(lines)):
-            for j in range(len(lines[0])):
-                if lines[i][j] > 9:
-                    lines[i][j] = 0
-                    cnt += 1
-        if cnt == len(lines) * len(lines[0]):
-            print(steps)
-            return
-        steps += 1
+        if np.all(energies[1:-1, 1:-1] == 0):
+            break
+        step += 1
+    print(step)
 
 if __name__ == "__main__":
     lines = open("input.txt","r").read().splitlines()
     linesTest = test_input.splitlines()
-    part1 = [list(map(int,list(line))) for line in lines]
-    part2 = [list(map(int,list(line))) for line in lines]
+    part1 = np.array([list(energy) for energy in lines]).astype(np.int32)
+    part2 = np.array([list(energy) for energy in lines]).astype(np.int32)
     solve_1(part1,100)
     solve_2(part2)

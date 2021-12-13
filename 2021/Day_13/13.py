@@ -95,12 +95,13 @@ def solve_2(lines):
         max_x = max(x,max_x)
         max_y = max(y,max_y)
     
-    grid = [['.'] * (max_x+1) for i in range(max_y+1)]
+    grid = [[' '] * (max_x+1) for i in range(max_y+1)]
     for (x,y) in mat:
         grid[y][x] = '#'
     for g in grid:
         print(g)
     #Ans = RHALRCRA
+
 if __name__ == "__main__":
     lines = open("input.txt","r").read().splitlines()
     linesTest = test_input.splitlines()

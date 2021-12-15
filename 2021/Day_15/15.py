@@ -24,13 +24,13 @@ test_input = \
 
 def search(m):
     h,w = np.shape(m)
-    q = [(0,(0,0))]     # risk, starting point
+    q = [(0,(0,0))]     # (risk and starting points)
     while q:
         risk, (x,y) = pq.heappop(q)
         if (x,y) == (w-1,h-1):
             return risk
         for x,y in [(x,y+1),(x+1,y),(x,y-1),(x-1,y)]:
-            if x >= 0 and x < w and y >= 0 and y < h and m[y][x] >= 0:
+            if 0 <= x < w and 0 <= y < h and m[y][x] >= 0:
                 pq.heappush(q, (risk+(m[y][x] % 9)+1, (x,y)))
                 m[y][x] = -1    # mark as seen
 

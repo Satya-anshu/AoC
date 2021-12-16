@@ -13,19 +13,6 @@ test_input = \
 test_input_2 = \
 '''A0016C880162017C3686B18A3D4780
 '''
-def hexToBin(lines):
-    d = {}
-    for i in range(16):
-        bin_key = f'{i:04b}'
-        if i < 10:
-            d[str(i)] = bin_key
-        else:
-            key = chr(i - 10 + ord('A'))
-            d[key] = bin_key
-    binary = ''
-    for hex in lines:
-        binary += d[hex]
-    return binary
 
 version = 0
 
@@ -37,18 +24,12 @@ def parse(binary):
     binary = binary[3:]
     if type == 4:
         for i in range(0,len(binary),5):
-            if binary[i] == "0":
+            if binary[i] == '0':
                 return binary[i+5:]
     else:
         length = binary[0]
         binary = binary[1:]
-        if length == "1":
-            pkts=int(binary[:11],2)
-            binary = binary[11:]
-            for i in range(pkts) :
-                binary = parse(binary)
-            return binary
-        else:
+        if length == '0':
             pkts=int(binary[:15],2)
             binary = binary[15:]
             sub_pkts = binary[:pkts]
@@ -56,6 +37,13 @@ def parse(binary):
             while sub_pkts:
                 sub_pkts = parse(sub_pkts)
             return binary
+        else:
+            pkts=int(binary[:11],2)
+            binary = binary[11:]
+            for i in range(pkts) :
+                binary = parse(binary)
+            return binary
+            
 
 def parse_2(binary):
     binary = binary[3:]
@@ -73,14 +61,7 @@ def parse_2(binary):
     else:
         length = binary[0]
         binary = binary[1:]
-        if length == "1":
-            pkts=int(binary[:11],2)
-            binary = binary[11:]
-            x = []
-            for i in range(pkts) :
-                binary,s = parse_2(binary)
-                x.append(s)
-        else:
+        if length == '0':
             pkts=int(binary[:15],2)
             binary = binary[15:]
             sub_pkts = binary[:pkts]
@@ -88,6 +69,13 @@ def parse_2(binary):
             x = []
             while sub_pkts:
                 sub_pkts,s = parse_2(sub_pkts)
+                x.append(s)
+        else:
+            pkts=int(binary[:11],2)
+            binary = binary[11:]
+            x = []
+            for i in range(pkts) :
+                binary,s = parse_2(binary)
                 x.append(s)
         
         if type == 0:

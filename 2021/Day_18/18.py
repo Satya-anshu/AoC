@@ -72,10 +72,12 @@ def reduce_expr(expr):
             if len(a) == 5 and l[i+4] == ']':
                 break
         
+        # Find 2 digit numbers in the list
         for k in range(len(l)):
             if len(l[k]) > 1:
                 break
         
+        # Always explode first!
         if i != len(l) - 1:
             # Get the 2 numbers
             nums = [int(n) for n in (l[i+1],l[i+3])]
@@ -96,14 +98,16 @@ def reduce_expr(expr):
 
             # Create new list after explosion
             l = l[:i] + ['0'] + l[i+5:]
-
+        
+        # If can't explode, try to split the number
         elif k != len(l) - 1:
             # Split the number into 2
             l = l[:k] + ["[", str(int(l[k])//2), ",", str((int(l[k])+1)//2),"]"] + l[k+1:]
         
+        # Else, Done!
         else:
-            # Nothing to do
             break
+
     return ''.join(l)
 
 def get_sum(reduced_expr):
@@ -133,6 +137,8 @@ def solve_1(expressions):
 
 def solve_2(expressions):
     max_sum = -1
+
+    # Neat permutation trick from itertools
     for p in permutations(expressions,2):
         add = "[" + p[0] + "," + p[1] + "]"
         reduced_expr = reduce_expr(add)

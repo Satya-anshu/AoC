@@ -1,3 +1,5 @@
+# Thanks to https://github.com/anthonywritescode/aoc2021/tree/main/day22 for his solution!
+
 from functools import partial
 import os
 import copy

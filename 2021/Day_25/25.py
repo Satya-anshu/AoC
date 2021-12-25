@@ -1,7 +1,5 @@
 import os
-import copy
-import collections
-import pytest
+import itertools
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
@@ -9,29 +7,29 @@ os.chdir(dname)
 
 
 test_input = \
+'''v...>>.vv>
+.vv>>.vv..
+>>.>v>...v
+>>v>>.>.v.
+v>v.vv.v..
+>.>>..v...
+.vv..>.>v.
+v.v..>>v.v
+....v..v.>
 '''
-'''
 
-def solve_1(lines):
-    for line in lines:
-        pass
-    return 0
+def solve(lines):
+    grid = [line.strip() for line in lines]
 
-def solve_2(lines):
-    for line in lines:
-        pass
-    return 0
+    h, w = len(grid), len(grid[0])
+    d = {(i,j): c for i, row in enumerate(grid) for j, c in enumerate(row) if c != '.'}
 
-@pytest.mark.parametrize(
-    ('input_s', 'expected'),
-    (
-        (test_input, 0),
-    ),
-)
-def test(input_s, expected):
-    assert(solve_1(input_s) == expected)
-
+    for t in itertools.count(1):
+        d1 = {p if c == '>' and (p:= (i, (j+1) % w)) not in d else (i,j): c for (i,j), c in d.items()}
+        d1 = {p if c == 'v' and (p:= ((i+1) % h, j)) not in d1 else (i,j): c for (i,j),c in d1.items()}
+        if d1 == d:
+            return t
+        d = d1
 if __name__ == "__main__":
     lines = open("input.txt","r").read().splitlines()
-    print('Part 1: ',solve_1(lines))
-    print('Part 2: ',solve_2(lines))
+    print('Part 1: ',solve(lines))

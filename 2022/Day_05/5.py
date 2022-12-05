@@ -11,6 +11,7 @@ test_input = \
 '''
 '''
 def parse(lines):
+    # My input
     stacks = [
         'DLJRVGF',
         'TPMBVHJS',
@@ -25,42 +26,35 @@ def parse(lines):
     stacks = [list(s) for s in stacks]
     return stacks
 
-def solve_1(lines):
+def solve(lines, use_stack_ordering):
     stacks = parse(lines)
     for line in range(10,len(lines)):
         ins = lines[line].split(" ")
         stacks_to_move = int(ins[1])
         from_stack = int(ins[3]) - 1
         to_stack = int(ins[5]) - 1
-
-        for i in range(stacks_to_move):
-            s = stacks[from_stack].pop()
-            stacks[to_stack].append(s)
+        if use_stack_ordering == True:
+            for _ in range(stacks_to_move):
+                s = stacks[from_stack].pop()
+                stacks[to_stack].append(s)
+        else:
+            order = []
+            for _ in range(stacks_to_move):
+                s = stacks[from_stack].pop()
+                order.append(s)
+            order.reverse()
+            for o in order:
+                stacks[to_stack].append(o)
     ans = []
     for s in stacks:
         ans.append(s[-1])
     return ''.join(ans)
+
+def solve_1(lines):
+    return solve(lines, True)
 
 def solve_2(lines):
-    stacks = parse(lines)
-    for line in range(10,len(lines)):
-        ins = lines[line].split(" ")
-        stacks_to_move = int(ins[1])
-        from_stack = int(ins[3]) - 1
-        to_stack = int(ins[5]) - 1
-        order = []
-        for i in range(stacks_to_move):
-            s = stacks[from_stack].pop()
-            order.append(s)
-        order.reverse()
-        for o in order:
-            stacks[to_stack].append(o)
-        
-    ans = []
-    for s in stacks:
-        ans.append(s[-1])
-    return ''.join(ans)
-
+    return solve(lines, False)
 
 if __name__ == "__main__":
     lines = open("input.txt","r").read().splitlines()
